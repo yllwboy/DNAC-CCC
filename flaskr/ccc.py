@@ -76,7 +76,7 @@ def backup_cons(queue, dnac, dnac_sess, restconf_sess):
                 backup_file.write(response.content)
             
             db = sqlite3.connect(
-                "/home/hcavalca/CCC/instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
+                "instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
             )
             db.row_factory = sqlite3.Row
             
@@ -113,7 +113,7 @@ def backup_cons(queue, dnac, dnac_sess, restconf_sess):
 
             if response.status_code == 200:
                 db = sqlite3.connect(
-                    "/home/hcavalca/CCC/instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
+                    "instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
                 )
                 db.row_factory = sqlite3.Row
                 db.execute(
@@ -212,7 +212,7 @@ def search(selection, config_type, query, dnac):
         filter = "config_type = 'CLI Startup'"
 
     db = sqlite3.connect(
-        "/home/hcavalca/CCC/instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
+        "instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
     )
     db.row_factory = sqlite3.Row
     if selection == 'all':
@@ -269,7 +269,7 @@ def update_devices(dnac, user_dnac):
     devices = response.json()['response']
     
     db = sqlite3.connect(
-        "/home/hcavalca/CCC/instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
+        "instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
     )
     db.row_factory = sqlite3.Row
 
@@ -296,7 +296,7 @@ def update_devices(dnac, user_dnac):
 
 def job_prod(jobqueue, actionqueue):
     db = sqlite3.connect(
-        "/home/hcavalca/CCC/instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
+        "instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
     )
     db.row_factory = sqlite3.Row
     jobs = db.execute(
