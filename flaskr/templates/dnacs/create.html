@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New DNAC{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="addr">Address:</label>
+    <input name="addr" id="addr" value="{{ request.form['addr'] }}" required><br>
+    <label for="dnac_user">DNAC username:</label>
+    <input name="dnac_user" id="dnac_user" value="{{ request.form['dnac_user'] }}" required>
+    <label for="dnac_pass">DNAC password:</label>
+    <input type="password" name="dnac_pass" id="dnac_pass" value="{{ request.form['dnac_pass'] }}" required><br>
+    <label for="restconf_user">RESTCONF username:</label>
+    <input name="restconf_user" id="restconf_user" value="{{ request.form['restconf_user'] }}" required>
+    <label for="restconf_pass">RESTCONF password:</label>
+    <input type="password" name="restconf_pass" id="restconf_pass" value="{{ request.form['restconf_pass'] }}" required><br>
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}DNACs{% endblock %}</h1>
+  <a class="action" href="{{ url_for('dnacs.create') }}">Add a new DNAC</a>
+{% endblock %}
+
+{% block content %}
+  {% for dnac in dnacs %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ dnac['addr'] }}</h1>
+          <div class="about">DNAC user: {{ dnac['dnac_user'] }} / RESTCONF user: {{ dnac['restconf_user'] }}</div>
+        </div>
+        <a class="action" href="{{ url_for('dnacs.update', id=dnac['id']) }}">Edit DNAC details</a>
+        <a class="action" href="{{ url_for('jobs.index', id=dnac['id']) }}">List of backup jobs</a>
+        <a class="action" href="{{ url_for('devices.index', id=dnac['id']) }}">List of connected devices</a>
+        <a class="action" href="{{ url_for('dnacs.globalbackup', id=dnac['id']) }}">Trigger global backup now</a>
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

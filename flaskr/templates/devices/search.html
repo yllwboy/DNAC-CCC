@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Search{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="query">Query:</label><br>
+    <textarea name="query" id="query" rows="5" cols="100" required></textarea><br>
+    <label for="selection">Search in:</label>
+    <select name="selection" id="selection">
+      <option value="all">All backed-up configuration files</option>
+      <option value="latest">Latest backed-up versions</option>
+    </select><br>
+    <label for="type">Configuration type:</label>
+    <select name="type" id="type">
+      <option value="all">All</option>
+      <option value="running">CLI Running</option>
+      <option value="startup">CLI Startup</option>
+    </select><br>
+    <input type="submit" value="Search">
+  </form>
+{% endblock %}

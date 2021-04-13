@@ -1,0 +1,4 @@
+flask
+pyzipper
+requests
+schedule

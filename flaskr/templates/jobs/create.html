@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New backup job{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="title">Title:</label>
+    <input name="title" id="title" value="{{ request.form['title'] }}" required><br>
+    <label for="weeks">Weeks:</label>
+    <input type="number" min="0" name="weeks" id="weeks" value="0" required>
+    <label for="days">Days:</label>
+    <input type="number" min="0" max="6" name="days" id="days" value="0" required>
+    <label for="hours">Hours:</label>
+    <input type="number" min="0" max="23" name="hours" id="hours" value="0" required>
+    <label for="minutes">Minutes:</label>
+    <input type="number" min="0" max="59" name="minutes" id="minutes" value="0" required><br>
+    <label for="activated">Activated:</label>
+    <input type="checkbox" name="activated" id="activated" value="enabled" checked><br>
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}

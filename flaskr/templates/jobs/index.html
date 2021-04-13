@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Backup jobs{% endblock %}</h1>
+  <a class="action" href="{{ url_for('jobs.create', id=id) }}">Create a new backup job</a>
+{% endblock %}
+
+{% block content %}
+  {% for job in jobs %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ job['title'] }}</h1>
+          <div class="about">for {{ job['addr'] }} on {{ job['created'].strftime('%d-%m-%Y') }}</div>
+        </div>
+      </header>
+      <form action="{{ url_for('jobs.update', id=job['dnac_id'], id_job=job['id']) }}" method="post" >
+        <label for="weeks">Weeks:</label>
+        <input type="number" min="0" name="weeks" id="weeks" value="{{ job['frequency'] // 10080 }}" required>
+        <label for="days">Days:</label>
+        <input type="number" min="0" max="6" name="days" id="days" value="{{ (job['frequency'] % 10080) // 1440 }}" required>
+        <label for="hours">Hours:</label>
+        <input type="number" min="0" max="23" name="hours" id="hours" value="{{ (job['frequency'] % 1440) // 60 }}" required>
+        <label for="minutes">Minutes:</label>
+        <input type="number" min="0" max="59" name="minutes" id="minutes" value="{{ job['frequency'] % 60 }}" required><br>
+        <label for="activated">Activated:</label>
+        <input type="checkbox" name="activated" id="activated" value="enabled" {% if job['activated'] == 1 %}checked{% endif %}><br>
+        <input type="submit" value="Update">
+      </form>
+      <form action="{{ url_for('jobs.delete', id=job['dnac_id'], id_job=job['id']) }}" method="post">
+        <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+      </form>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Devices{% endblock %}</h1>
+  <a class="action" href="{{ url_for('devices.search_in_backups', id=id) }}">Search</a>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+  <input type="submit" id="view" name="view" value="View">
+  <input type="submit" id="restore" name="restore" value="Restore">
+  <input type="submit" id="compare" name="compare" value="Compare">
+  {% for device in devices %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ device['hostname'] }}</h1>
+          <div class="about">{{ device['uuid'] }}</div>
+        </div>
+      </header>
+      
+      {% for backup in backups if backup['device_id'] == device['id'] %}
+        {% if loop.first %}
+      <input type="radio" name="a" value="{{ device['id'] }}" required>
+      <select name="a{{ device['id'] }}">
+        {% endif %}
+        <option value="{{ backup['id'] }}">[{{ backup['config_type'] }}] {{ backup['created'] }}</option>
+        {% if loop.last %}
+      </select>
+        {% endif %}
+      {% else %}
+      <p>No backups available.</p>
+      {% endfor %}
+      
+      {% for backup in backups if backup['device_id'] == device['id'] %}
+        {% if loop.first %}
+      <input type="radio" name="b" value="{{ device['id'] }}" required>
+      <select name="b{{ device['id'] }}">
+        {% endif %}
+        <option value="{{ backup['id'] }}">[{{ backup['config_type'] }}] {{ backup['created'] }}</option>
+        {% if loop.last %}
+      </select>
+        {% endif %}
+      {% endfor %}
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+  </form>
+{% endblock %}
