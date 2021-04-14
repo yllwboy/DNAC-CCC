@@ -12,7 +12,6 @@ bp = Blueprint("dnacs", __name__)
 @bp.route("/dnacs")
 @login_required
 def index():
-    """Show all the DNACs, most recent first."""
     db = get_db()
     dnacs = db.execute(
         "SELECT id, addr, dnac_user, dnac_pass, restconf_user, restconf_pass"
@@ -24,18 +23,7 @@ def index():
     return render_template("dnacs/index.html", dnacs=dnacs)
 
 
-def get_dnac(id, check_author=True):
-    """Get a post and its author by id.
-
-    Checks that the id exists and optionally that the current user is
-    the author.
-
-    :param id: id of post to get
-    :param check_author: require the current user to be the author
-    :return: the post with author information
-    :raise 404: if a post with the given id doesn't exist
-    :raise 403: if the current user isn't the author
-    """
+def get_dnac(id):
     dnac = (
         get_db()
         .execute(
@@ -64,7 +52,6 @@ def globalbackup(id):
 @bp.route("/dnacs/create", methods=("GET", "POST"))
 @login_required
 def create():
-    """Create a new post for the current user."""
     if request.method == "POST":
         addr = request.form["addr"]
         dnac_user = request.form["dnac_user"]
@@ -75,7 +62,11 @@ def create():
 
         if not addr:
             error = "Address is required."
-
+        elif not dnac_user:
+            error = "DNAC username is required."
+        elif not dnac_pass:
+            error = "DNAC password is required."
+        
         if error is not None:
             flash(error)
         else:
@@ -97,10 +88,16 @@ def create():
             )
             if dnac is None:
                 abort(500, f"DNAC {addr} doesn't exist.")
-            db.execute(
-                "INSERT INTO user_dnac VALUES (?, ?, ?, ?, ?, ?)",
-                (g.user["id"], dnac["id"], dnac_user, dnac_pass, restconf_user, restconf_pass),
-            )
+            if not restconf_user or not restconf_pass:
+                db.execute(
+                    "INSERT INTO user_dnac VALUES (?, ?, ?, ?)",
+                    (g.user["id"], dnac["id"], dnac_user, dnac_pass),
+                )
+            else:
+                db.execute(
+                    "INSERT INTO user_dnac VALUES (?, ?, ?, ?, ?, ?)",
+                    (g.user["id"], dnac["id"], dnac_user, dnac_pass, restconf_user, restconf_pass),
+                )
             db.commit()
             return redirect(url_for("dnacs.index"))
 
@@ -110,7 +107,6 @@ def create():
 @bp.route("/dnacs/<int:id>/update", methods=("GET", "POST"))
 @login_required
 def update(id):
-    """Update a post if the current user is the author."""
     dnac = get_dnac(id)
 
     if request.method == "POST":
@@ -136,11 +132,6 @@ def update(id):
 @bp.route("/dnacs/<int:id>/delete", methods=("POST",))
 @login_required
 def delete(id):
-    """Delete a post.
-
-    Ensures that the post exists and that the logged in user is the
-    author of the post.
-    """
     dnac = get_dnac(id)
     db = get_db()
     db.execute("DELETE FROM dnac WHERE id = ?", (id,))

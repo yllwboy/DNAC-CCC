@@ -15,7 +15,6 @@ bp = Blueprint("devices", __name__)
 @bp.route("/dnacs/<int:id>/devices", methods=("GET", "POST"))
 @login_required
 def index(id):
-    """Show all the posts, most recent first."""
     if request.method == "POST":
         a = request.form["a"]
         a_ver = request.form["a"+a]
@@ -25,7 +24,14 @@ def index(id):
         error = None
 
         if not a:
-            error = "Title is required."
+            error = "Selection of the left version is required."
+        elif not a_ver:
+            error = "Left version is required."
+        elif not b:
+            error = "Selection of the right version is required."
+        elif not b_ver:
+            error = "Right version is required."
+        
 
         if error is not None:
             flash(error)
@@ -57,6 +63,7 @@ def index(id):
             hd = difflib.HtmlDiff()
             
             return hd.make_file(old['content'].splitlines(), new['content'].splitlines())
+    
     db = get_db()
     user_dnac = (
         db
@@ -102,18 +109,7 @@ def index(id):
     return render_template("devices/index.html", id=id, devices=devices, backups=backups)
 
 
-def get_device(id, check_author=True):
-    """Get a post and its author by id.
-
-    Checks that the id exists and optionally that the current user is
-    the author.
-
-    :param id: id of post to get
-    :param check_author: require the current user to be the author
-    :return: the post with author information
-    :raise 404: if a post with the given id doesn't exist
-    :raise 403: if the current user isn't the author
-    """
+def get_device(id, check_owner=True):
     device = (
         get_db()
         .execute(
@@ -138,7 +134,7 @@ def get_device(id, check_author=True):
     if device is None:
         abort(404, f"Device id {id} doesn't exist.")
 
-    if check_author and user_dnac is None:
+    if check_owner and user_dnac is None:
         abort(403)
 
     return device
@@ -147,7 +143,6 @@ def get_device(id, check_author=True):
 @bp.route("/dnacs/<int:id>/devices/search", methods=("GET", "POST"))
 @login_required
 def search_in_backups(id):
-    """Create a new post for the current user."""
     if request.method == "POST":
         query = request.form["query"]
         selection = request.form["selection"]
@@ -156,7 +151,11 @@ def search_in_backups(id):
 
         if not query:
             error = "Query is required."
-
+        elif not selection:
+            error = "Selection choice is required."
+        elif not config_type:
+            error = "Configuration type selection is required."
+        
         if error is not None:
             flash(error)
         else:
@@ -168,7 +167,6 @@ def search_in_backups(id):
 @bp.route("/backups/<int:id>")
 @login_required
 def view_backup(id):
-    """Show all the posts, most recent first."""
     db = get_db()
     backup = (
         db
