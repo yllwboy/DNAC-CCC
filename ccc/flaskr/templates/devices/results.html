@@ -20,7 +20,7 @@
       </header>
     {% for match in result[1] %}
       <div class="about">{{ match }}</div>
-      <p>{% if match[0] - 128 < 0 %}{{ result[0]['content'][:match[0]] }}{% else %}...{{ result[0]['content'][match[0] - 128:match[0]] }}{% endif %}<mark>{{ result[0]['content'][match[0]:match[1]] }}</mark>{% if match[0] + 128 >= result[0]['content']|length - 1 %}{{ result[0]['content'][match[1]:] }}{% else %}{{ result[0]['content'][match[1]:match[1] + 128] }}...{% endif %}</p>
+      <pre>{% if match[0] - 128 < 0 %}{{ result[0]['content'][:match[0]] }}{% else %}...{{ result[0]['content'][match[0] - 128:match[0]] }}{% endif %}<mark>{{ result[0]['content'][match[0]:match[1]] }}</mark>{% if match[0] + 128 >= result[0]['content']|length - 1 %}{{ result[0]['content'][match[1]:] }}{% else %}{{ result[0]['content'][match[1]:match[1] + 128] }}...{% endif %}</pre>
     {% endfor %}
     </article>
     {% if not loop.last %}

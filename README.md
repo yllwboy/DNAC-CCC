@@ -7,3 +7,5 @@ A tool designed to manage the configuration of devices connected to Cisco DNA Ce
 3. `docker-compose build`
 4. `docker-compose up -d`
 5. Access the web interface by opening <http://0.0.0.0:5000/> on a web browser.
+
+## Getting started
