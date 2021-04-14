@@ -132,7 +132,7 @@ def update(id):
 @bp.route("/dnacs/<int:id>/delete", methods=("POST",))
 @login_required
 def delete(id):
-    dnac = get_dnac(id)
+    get_dnac(id)
     db = get_db()
     db.execute("DELETE FROM dnac WHERE id = ?", (id,))
     db.commit()
