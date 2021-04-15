@@ -46,6 +46,7 @@ def get_dnac(id):
 def globalbackup(id):
     dnac = get_dnac(id)
     backup(dnac, True, False)
+    flash("Global backup completed successfully!")
     return redirect(url_for("dnacs.index"))
 
 

@@ -176,8 +176,8 @@ def backup(dnac, target, pubkey):
 
     pipeline = queue.Queue(maxsize=10)
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        for i in range(4):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        for i in range(9):
             devices.append("END")
             executor.submit(backup_cons, pipeline, dnac, dnac_sess, restconf_sess)
         executor.submit(producer, pipeline, devices)
