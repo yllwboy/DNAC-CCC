@@ -216,12 +216,10 @@ def search(selection, config_type, query, dnac):
     pipeline = queue.Queue(maxsize=10)
     results = []
     processes = []
-    filter = "1=1"
+    filter = "config_type <> 'RESTCONF'"
     backups = Cursor
 
-    if config_type == "all":
-        filter = "config_type <> 'RESTCONF'"
-    elif config_type == "running":
+    if config_type == "running":
         filter = "config_type = 'CLI Running'"
     elif config_type == "startup":
         filter = "config_type = 'CLI Startup'"
