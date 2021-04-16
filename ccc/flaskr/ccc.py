@@ -17,15 +17,6 @@ class BackupError(RuntimeError):
         super().__init__(*args)
 
 
-def findall(p, s):
-    '''Yields all the positions of
-    the pattern p in the string s.'''
-    i = s.find(p)
-    while i != -1:
-        yield i
-        i = s.find(p, i+1)
-
-
 def producer(queue, products):
     for p in products:
         queue.put(p)
@@ -196,7 +187,16 @@ def backup(dnac, target, pubkey):
         return "Backup operation completed successfully!"
     else:
         return errors
-    
+
+
+def findall(p, s):
+    '''Yields all the positions of
+    the pattern p in the string s.'''
+    i = s.find(p)
+    while i != -1:
+        yield i
+        i = s.find(p, i+1)
+
 
 def search_cons(queue, query):
     results = []
