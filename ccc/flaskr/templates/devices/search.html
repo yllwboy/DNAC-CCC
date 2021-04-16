@@ -6,19 +6,41 @@
 
 {% block content %}
   <form method="post">
-    <label for="query">Query:</label><br>
-    <textarea name="query" id="query" rows="5" cols="100" required></textarea><br>
+    <label for="query">Query:</label>
+    <input name="query" id="query" required>
     <label for="selection">Search in:</label>
     <select name="selection" id="selection">
       <option value="all">All backed-up configuration files</option>
       <option value="latest">Latest backed-up versions</option>
-    </select><br>
+    </select>
     <label for="type">Configuration type:</label>
     <select name="type" id="type">
       <option value="all">All</option>
       <option value="running">CLI Running</option>
       <option value="startup">CLI Startup</option>
-    </select><br>
+    </select>
     <input type="submit" value="Search">
   </form>
+  <hr>
+  {% for result in results %}
+    <a class="action" href="#{{ result[0]['id'] }}">{{ result[0]['hostname'] }} -- [{{ result[0]['config_type'] }}] {{ result[0]['created'] }}</a><br>
+  {% endfor %}
+  <hr>
+  {% for result in results %}
+    <article class="post">
+      <header>
+        <div>
+          <h1 id="{{ result[0]['id'] }}">{{ result[0]['hostname'] }} -- [{{ result[0]['config_type'] }}] {{ result[0]['created'] }}</h1>
+        </div>
+        <a class="action" href="{{ url_for('devices.view_backup', id=result[0]['id']) }}">View file</a>
+      </header>
+    {% for match in result[1] %}
+      <div class="about">{{ match }}</div>
+      <pre>{% if match[0] - 128 < 0 %}{{ result[0]['content'][:match[0]] }}{% else %}...{{ result[0]['content'][match[0] - 128:match[0]] }}{% endif %}<mark>{{ result[0]['content'][match[0]:match[1]] }}</mark>{% if match[0] + 128 >= result[0]['content']|length - 1 %}{{ result[0]['content'][match[1]:] }}{% else %}{{ result[0]['content'][match[1]:match[1] + 128] }}...{% endif %}</pre>
+    {% endfor %}
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
 {% endblock %}

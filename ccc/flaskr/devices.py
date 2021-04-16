@@ -159,7 +159,7 @@ def search_in_backups(id):
         if error is not None:
             flash(error)
         else:
-            return render_template("devices/results.html", results=search(selection, config_type, query, id))
+            return render_template("devices/search.html", id=id, results=search(selection, config_type, query, id))
     
     return render_template("devices/search.html", id=id)
 

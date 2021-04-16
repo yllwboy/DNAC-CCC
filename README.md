@@ -26,13 +26,9 @@ In the device management page, you can view and compare different configuration 
 
 ![Device management page](screenshots/devices.png)
 
-From the device management page, you can access the search page which allows you to find a snippet inside the configuration files backed-up by the tool.
+From the device management page, you can access the search page which allows you to find a snippet inside the configuration files backed-up by the tool. Running a search will show which files have a match, the list of matches for each file and a link that allows you to see the full file.
 
 ![Search page](screenshots/search.png)
-
-The results page shows which files have a match, the list of matches for each file and a link that allows you to see the full file.
-
-![Results page](screenshots/results.png)
 
 ## To-Do
 - Multi-line search
