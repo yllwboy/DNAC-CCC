@@ -37,4 +37,3 @@ The results page shows which files have a match, the list of matches for each fi
 ## To-Do
 - Multi-line search
 - Restoring a configuration to a backed-up version using RESTCONF
-- Backup operation error handling

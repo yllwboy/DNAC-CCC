@@ -32,10 +32,12 @@ def producer(queue, products):
 
 
 def backup_cons(queue, dnac, dnac_sess, restconf_sess):
+    errors = []
+    
     while True:
         d = queue.get()
         if d == "END":
-            return
+            return errors
 
         folder = "Backups/{}/{}/".format(dnac['id'], d['id'])
 
@@ -55,7 +57,7 @@ def backup_cons(queue, dnac, dnac_sess, restconf_sess):
                 print(response.json()['response']['progress']+" => {}".format(response.json()['response']['isError']))
 
                 if response.json()['response']['isError'] == True:
-                    raise BackupError(response.json()['response']['progress'])
+                    raise BackupError("[{}] {}".format(d['hostname'], response.json()['response']['progress']))
                 
                 if 'additionalStatusURL' in response.json()['response']:
                     file_url = response.json()['response']['additionalStatusURL']
@@ -128,12 +130,14 @@ def backup_cons(queue, dnac, dnac_sess, restconf_sess):
                 print(response.text)
             
         except BackupError as e:
-            print(e.args[0])
+            errors.append(e.args[0])
         except Exception as e:
-            print(e.args[0])
+            errors.append(e.args[0])
 
 
 def backup(dnac, target, pubkey):
+    processes = []
+    
     dnac_sess = requests.Session()
     restconf_sess = requests.Session()
 
@@ -176,11 +180,22 @@ def backup(dnac, target, pubkey):
 
     pipeline = queue.Queue(maxsize=10)
 
+    errors = "Errors: "
+
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         for i in range(9):
             devices.append("END")
-            executor.submit(backup_cons, pipeline, dnac, dnac_sess, restconf_sess)
+            processes.append(executor.submit(backup_cons, pipeline, dnac, dnac_sess, restconf_sess))
         executor.submit(producer, pipeline, devices)
+
+        for p in concurrent.futures.as_completed(processes):
+            for e in p.result():
+                errors += "{}, ".format(e)
+        
+    if errors == "Errors: ":
+        return "Backup operation completed successfully!"
+    else:
+        return errors
     
 
 def search_cons(queue, query):

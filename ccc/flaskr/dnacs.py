@@ -45,8 +45,7 @@ def get_dnac(id):
 @login_required
 def globalbackup(id):
     dnac = get_dnac(id)
-    backup(dnac, True, False)
-    flash("Global backup completed successfully!")
+    flash(backup(dnac, True, False))
     return redirect(url_for("dnacs.index"))
 
 
