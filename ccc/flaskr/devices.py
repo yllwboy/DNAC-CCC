@@ -37,8 +37,6 @@ def index(id):
             flash(error)
         elif "view" in request.form:
             return redirect(url_for("devices.view_backup", id=a_ver))
-        elif "restore" in request.form:
-            return redirect(url_for("devices.view_backup", id=a_ver))
         elif "compare" in request.form:
             old = (
                 get_db()

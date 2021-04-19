@@ -34,6 +34,10 @@ In the device management page, you can view and compare different configuration 
 
 ![Device management page](screenshots/devices.png)
 
+Comparing two configuration versions will yield a diff view. It contains shortcuts next to the line numbers which allow you to explore all differences quickly.
+
+![Diff view](screenshots/diff.png)
+
 ### Search page
 
 From the device management page, you can access the search page which allows you to find a snippet inside the configuration files backed-up by the tool. Running a search will show which files have a match, the list of matches for each file and a link that allows you to see the full file.
