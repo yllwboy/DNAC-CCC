@@ -98,7 +98,7 @@ def backup_cons(queue, dnac, dnac_sess, restconf_sess):
             db.commit()
             db.close()
 
-            if restconf_sess:
+            if restconf_sess is not None:
                 url = "https://{}/restconf/data/Cisco-IOS-XE-native:native".format(d['managementIpAddress'])
 
                 response = restconf_sess.request("GET", url, data=payload, timeout=5)
@@ -131,7 +131,7 @@ def backup(dnac, target, pubkey):
     processes = []
     
     dnac_sess = requests.Session()
-    restconf_sess = False
+    restconf_sess = None
 
     url = "https://{}/dna/system/api/v1/auth/token".format(dnac['addr'])
 
