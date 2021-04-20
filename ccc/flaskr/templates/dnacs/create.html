@@ -13,9 +13,9 @@
     <label for="dnac_pass">DNAC password:</label>
     <input type="password" name="dnac_pass" id="dnac_pass" value="{{ request.form['dnac_pass'] }}" required><br>
     <label for="restconf_user">RESTCONF username:</label>
-    <input name="restconf_user" id="restconf_user" value="{{ request.form['restconf_user'] }}">
+    <input name="restconf_user" id="restconf_user" value="{{ request.form['restconf_user'] }}" placeholder="Optional">
     <label for="restconf_pass">RESTCONF password:</label>
-    <input type="password" name="restconf_pass" id="restconf_pass" value="{{ request.form['restconf_pass'] }}"><br>
+    <input type="password" name="restconf_pass" id="restconf_pass" value="{{ request.form['restconf_pass'] }}" placeholder="Optional"><br>
     <input type="submit" value="Save">
   </form>
 {% endblock %}
