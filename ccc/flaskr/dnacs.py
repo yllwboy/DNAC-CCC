@@ -111,10 +111,18 @@ def update(id):
 
     if request.method == "POST":
         addr = request.form["addr"]
+        dnac_user = request.form["dnac_user"]
+        dnac_pass = request.form["dnac_pass"]
+        restconf_user = request.form["restconf_user"]
+        restconf_pass = request.form["restconf_pass"]
         error = None
 
         if not addr:
             error = "Address is required."
+        elif not dnac_user:
+            error = "DNAC username is required."
+        elif not dnac_pass:
+            error = "DNAC password is required."
 
         if error is not None:
             flash(error)
@@ -122,6 +130,10 @@ def update(id):
             db = get_db()
             db.execute(
                 "UPDATE dnac SET addr = ? WHERE id = ?", (addr, id)
+            )
+            db.execute(
+                "UPDATE user_dnac SET dnac_user = ?, dnac_pass = ?, restconf_user = ?, restconf_pass = ? WHERE user_id = ? AND dnac_id = ?",
+                (dnac_user, dnac_pass, restconf_user, restconf_pass, g.user["id"], id),
             )
             db.commit()
             return redirect(url_for("dnacs.index"))
