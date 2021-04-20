@@ -1,7 +1,9 @@
 # Configuration Compliance Check
-A tool designed to manage the configuration of devices connected to Cisco DNA Center through its APIs.
+A tool designed to manage the configuration of devices connected to Cisco DNA Center. Its purpose is to extend the current Cisco DNA Center feature set in that domain, to do that we leverage the DNA Center APIs through a containerized Python web application. You can use this tool to schedule backup jobs for the configuration files, find a snippet inside the backed-up configuration files or compare two configuration versions side-by-side.
 
 ## Installation
+Install Docker in order to build and run the image with the web application in a container. Once Docker is installed, type the following in a terminal:
+
 1. `git clone https://github.com/yllwboy/CCC.git`
 2. `cd CCC`
 3. `docker-compose build`
