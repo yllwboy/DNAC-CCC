@@ -98,27 +98,28 @@ def backup_cons(queue, dnac, dnac_sess, restconf_sess):
             db.commit()
             db.close()
 
-            url = "https://{}/restconf/data/Cisco-IOS-XE-native:native".format(d['managementIpAddress'])
+            if restconf_sess:
+                url = "https://{}/restconf/data/Cisco-IOS-XE-native:native".format(d['managementIpAddress'])
 
-            response = restconf_sess.request("GET", url, data=payload, timeout=5)
-
-            # print(response.text)
-
-            if response.status_code == 200:
-                db = sqlite3.connect(
-                    "instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
-                )
-                db.row_factory = sqlite3.Row
-                db.execute(
-                    "INSERT INTO backup (device_id, config_type, content) VALUES (?, ?, ?)",
-                    (device["id"], "RESTCONF", response.text),
-                )
-                db.commit()
-                db.close()
-            else:
-                url = "https://{}/restconf/data/netconf-state/capabilities".format(d['managementIpAddress'])
                 response = restconf_sess.request("GET", url, data=payload, timeout=5)
-                print(response.text)
+
+                # print(response.text)
+
+                if response.status_code == 200:
+                    db = sqlite3.connect(
+                        "instance/flaskr.sqlite", detect_types=sqlite3.PARSE_DECLTYPES
+                    )
+                    db.row_factory = sqlite3.Row
+                    db.execute(
+                        "INSERT INTO backup (device_id, config_type, content) VALUES (?, ?, ?)",
+                        (device["id"], "RESTCONF", response.text),
+                    )
+                    db.commit()
+                    db.close()
+                else:
+                    url = "https://{}/restconf/data/netconf-state/capabilities".format(d['managementIpAddress'])
+                    response = restconf_sess.request("GET", url, data=payload, timeout=5)
+                    print(response.text)
             
         except BackupError as e:
             errors.append(e.args[0])
@@ -130,7 +131,7 @@ def backup(dnac, target, pubkey):
     processes = []
     
     dnac_sess = requests.Session()
-    restconf_sess = requests.Session()
+    restconf_sess = False
 
     url = "https://{}/dna/system/api/v1/auth/token".format(dnac['addr'])
 
@@ -138,12 +139,15 @@ def backup(dnac, target, pubkey):
     dnac_sess.headers.update({'Content-Type': 'application/json'})
     dnac_sess.verify=pubkey
 
-    restconf_sess.headers.update({
-        'Content-Type': 'application/yang-data+json',
-        'Accept': 'application/yang-data+json'
-    })
-    restconf_sess.verify=pubkey
-    restconf_sess.auth=HTTPBasicAuth(dnac['restconf_user'], dnac['restconf_pass'])
+    if not dnac['restconf_user'] or not dnac['restconf_pass']:
+        restconf_sess = requests.Session()
+
+        restconf_sess.headers.update({
+            'Content-Type': 'application/yang-data+json',
+            'Accept': 'application/yang-data+json'
+        })
+        restconf_sess.verify=pubkey
+        restconf_sess.auth=HTTPBasicAuth(dnac['restconf_user'], dnac['restconf_pass'])
 
     response = dnac_sess.request("POST", url, auth=HTTPBasicAuth(dnac['dnac_user'], dnac['dnac_pass']), data=payload)
 
