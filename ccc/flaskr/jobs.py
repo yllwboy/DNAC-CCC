@@ -94,11 +94,11 @@ def create(id):
         
         if "activated" in request.form:
             activated = 1
-        else:
-            activated = 0
 
         if not title:
             error = "Title is required."
+        elif not frequency:
+            error = "Frequency is required."
 
         if error is not None:
             flash(error)
@@ -123,22 +123,13 @@ def create(id):
 def update(id, id_job):
     if request.method == "POST":
         get_job(id_job)
-        weeks = request.form["weeks"]
-        days = request.form["days"]
-        hours = request.form["hours"]
-        minutes = request.form["minutes"]
 
+        frequency = int(request.form["weeks"]) * 10080 + int(request.form["days"]) * 1440 + int(request.form["hours"]) * 60 + int(request.form["minutes"])
         activated = 0
         error = None
 
-        if not weeks:
-            error = "Number of weeks is required."
-        elif not days:
-            error = "Number of days is required."
-        elif not hours:
-            error = "Number of hours is required."
-        elif not minutes:
-            error = "Number of minutes is required."
+        if not frequency:
+            error = "Frequency is required."
         
         if "activated" in request.form:
             activated = 1
@@ -146,8 +137,6 @@ def update(id, id_job):
         if error is not None:
             flash(error)
         else:
-            frequency = int(weeks) * 10080 + int(days) * 1440 + int(hours) * 60 + int(minutes)
-
             db = get_db()
             db.execute(
                 "UPDATE job SET frequency = ?, activated = ? WHERE id = ?",
