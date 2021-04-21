@@ -10,7 +10,6 @@ import requests
 import schedule
 from requests.auth import HTTPBasicAuth
 
-job_service_alive = False
 
 class BackupError(RuntimeError):
     def __init__(self, *args: object) -> None:
@@ -154,24 +153,20 @@ def backup(dnac, target, pubkey):
     # print(response.text)
 
     dna_token = response.json()['Token']
-    url = "https://{}/dna/intent/api/v1/network-device".format(dnac['addr'])
     dnac_sess.headers.update({'Content-Type': 'application/json', 'x-auth-token': dna_token})
-    
-    response = dnac_sess.request("GET", url, data=payload)
     
     # print(response.text)
 
     devices = []
+    all_devs = update_devices(dnac, dnac)
     if target == True:
-        devices = response.json()['response']
+        devices = all_devs
     else:
-        for d in response.json()['response']:
+        for d in all_devs:
             if d['id'] in target:
                 devices.append(d)
 
     # print(devices)
-
-    update_devices(dnac, dnac)
 
     pipeline = queue.Queue(maxsize=10)
 
@@ -275,6 +270,9 @@ def update_devices(dnac, user_dnac):
 
     print(response.text)
 
+    if 'Token' not in response.json():
+        return None
+
     dna_token = response.json()['Token']
 
     url = "https://{}/dna/intent/api/v1/network-device".format(dnac["addr"])
@@ -290,6 +288,10 @@ def update_devices(dnac, user_dnac):
     )
     db.row_factory = sqlite3.Row
 
+    db.execute(
+        "UPDATE device SET connected = 0 WHERE dnac_id = ?", (dnac['id'],)
+    )
+
     for d in devices:
         exists = db.execute(
             "SELECT *"
@@ -299,16 +301,18 @@ def update_devices(dnac, user_dnac):
         ).fetchone()
         if exists is None:
             db.execute(
-                "INSERT INTO device (dnac_id, uuid, hostname) VALUES (?, ?, ?)",
-                (dnac['id'], d["id"], d["hostname"]),
+                "INSERT INTO device (dnac_id, uuid, hostname, addr) VALUES (?, ?, ?, ?)",
+                (dnac['id'], d["id"], d["hostname"], d["managementIpAddress"]),
             )
         else:
             db.execute(
-                "UPDATE device SET hostname = ? WHERE id = ?", (d["hostname"], exists["id"])
+                "UPDATE device SET hostname = ?, addr = ?, connected = 1 WHERE id = ?", (d["hostname"], d["managementIpAddress"], exists["id"])
             )
     
     db.commit()
     db.close()
+
+    return devices
 
 
 def job_prod(jobqueue, actionqueue):
@@ -354,3 +358,20 @@ def job_service(actionqueue):
         executor.submit(job_prod, jobqueue, actionqueue)
         for i in range(4):
             executor.submit(job_cons, jobqueue)
+
+
+def restconf_restore(addr, payload, user, pubkey):
+    restconf_sess = requests.Session()
+    
+    url = "https://{}/restconf/data/Cisco-IOS-XE-native:native".format(addr)
+
+    restconf_sess.headers.update({
+        'Content-Type': 'application/yang-data+json',
+        'Accept': 'application/yang-data+json'
+    })
+    restconf_sess.verify=pubkey
+    restconf_sess.auth=HTTPBasicAuth(user['restconf_user'], user['restconf_pass'])
+
+    response = restconf_sess.request("PUT", url, data=payload)
+
+    return response.status_code

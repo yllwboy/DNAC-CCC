@@ -90,7 +90,7 @@ def create():
                 abort(500, f"DNAC {addr} doesn't exist.")
             if not restconf_user or not restconf_pass:
                 db.execute(
-                    "INSERT INTO user_dnac VALUES (?, ?, ?, ?)",
+                    "INSERT INTO user_dnac (user_id, dnac_id, dnac_user, dnac_pass) VALUES (?, ?, ?, ?)",
                     (g.user["id"], dnac["id"], dnac_user, dnac_pass),
                 )
             else:

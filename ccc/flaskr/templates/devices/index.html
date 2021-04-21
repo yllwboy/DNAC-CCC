@@ -7,14 +7,15 @@
 
 {% block content %}
   <form method="post">
-  <input type="submit" id="view" name="view" value="View">
-  <input type="submit" id="compare" name="compare" value="Compare">
+    <input type="submit" id="view" name="view" value="View">
+    <input type="submit" id="compare" name="compare" value="Compare">
+    <input type="submit" id="restore" name="restore" value="Restore (RESTCONF only)">
   {% for device in devices %}
     <article class="post">
       <header>
         <div>
           <h1>{{ device['hostname'] }}</h1>
-          <div class="about">{{ device['uuid'] }}</div>
+          <div class="about">Status: {% if device['connected'] %}Connected{% else %}Disconnected{% endif %} -- UUID: {{ device['uuid'] }}</div>
         </div>
       </header>
       

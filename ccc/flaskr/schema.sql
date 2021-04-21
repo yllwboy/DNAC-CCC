@@ -49,6 +49,8 @@ CREATE TABLE device (
   dnac_id INTEGER NOT NULL,
   uuid CHAR(36) NOT NULL,
   hostname TEXT NOT NULL,
+  addr TEXT NOT NULL,
+  connected BIT NOT NULL DEFAULT 1,
   FOREIGN KEY (dnac_id) REFERENCES dnac (id)
 );
 

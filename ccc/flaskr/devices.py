@@ -6,7 +6,7 @@ from flask.helpers import make_response
 from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
-from flaskr.ccc import search, update_devices
+from flaskr.ccc import search, update_devices, restconf_restore
 from flaskr.db import get_db
 
 bp = Blueprint("devices", __name__)
@@ -61,7 +61,42 @@ def index(id):
             hd = difflib.HtmlDiff()
             
             return hd.make_file(old['content'].splitlines(), new['content'].splitlines())
-    
+        elif "restore" in request.form:
+            device = (
+                get_db()
+                .execute(
+                    "SELECT *"
+                    " FROM device"
+                    " WHERE id = ?",
+                    (a,),
+                )
+                .fetchone()
+            )
+            backup = (
+                get_db()
+                .execute(
+                    "SELECT *"
+                    " FROM backup"
+                    " WHERE id = ? AND config_type = 'RESTCONF'",
+                    (a_ver,),
+                )
+                .fetchone()
+            )
+            if backup is None:
+                abort(500, 'Invalid configuration version. Did you pick a RESTCONF version?')
+            user_dnac = (
+                get_db()
+                .execute(
+                    "SELECT *"
+                    " FROM user_dnac"
+                    " WHERE user_id = ? AND dnac_id = ?",
+                    (g.user["id"], id),
+                )
+                .fetchone()
+            )
+            
+            return "Response status code: {}".format(restconf_restore(device['addr'], backup['content'], user_dnac, None))
+
     db = get_db()
     user_dnac = (
         db
