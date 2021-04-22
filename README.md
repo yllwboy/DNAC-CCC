@@ -32,7 +32,7 @@ You can configure your backup jobs here.
 
 ### Device management page
 
-In the device management page, you can view and compare different configuration versions from the devices connected to the DNA Center which contain a configuration file the Cisco DNA Center can access.
+In the device management page, you can view and compare different configuration versions from the devices connected to the DNA Center which contain a configuration file the Cisco DNA Center can access. If you have set up RESTCONF for the selected DNA Center, you can restore a backed-up RESTCONF configuration version to the devices that support RESTCONF. Since RESTCONF is a protocol that requires connecting directly to the devices, firewalls might interfere with this functionality.
 
 ![Device management page](screenshots/devices.png)
 
@@ -48,4 +48,3 @@ From the device management page, you can access the search page which allows you
 
 ## To-Do
 - Multi-line search
-- Restoring a configuration to a backed-up version using RESTCONF
