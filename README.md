@@ -36,6 +36,8 @@ In the device management page, you can view and compare different configuration 
 
 ![Device management page](screenshots/devices.png)
 
+For unary operations such as view or restore, the left section will be the one that determines which version is selected.
+
 Comparing two configuration versions will yield a diff view. It contains shortcuts next to the line numbers which allow you to explore all differences quickly.
 
 ![Diff view](screenshots/diff.png)
