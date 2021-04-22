@@ -11,7 +11,7 @@
       <header>
         <div>
           <h1>{{ job['title'] }}</h1>
-          <div class="about">for {{ job['addr'] }} on {{ job['created'].strftime('%d-%m-%Y') }}</div>
+          <div class="about">for {{ job['addr'] }} on {{ job['created'] }}</div>
         </div>
       </header>
       <form action="{{ url_for('jobs.update', id=job['dnac_id'], id_job=job['id']) }}" method="post" >

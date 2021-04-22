@@ -139,7 +139,7 @@ def update(id, id_job):
         else:
             db = get_db()
             db.execute(
-                "UPDATE job SET frequency = ?, activated = ? WHERE id = ?",
+                "UPDATE job SET created = CURRENT_TIMESTAMP, frequency = ?, activated = ? WHERE id = ?",
                 (frequency, activated, id_job)
             )
             db.commit()
