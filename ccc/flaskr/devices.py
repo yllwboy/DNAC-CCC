@@ -96,6 +96,11 @@ def index(id):
             )
             
             return "Response status code: {}".format(restconf_restore(device['addr'], backup['content'], user_dnac, None))
+        elif "purge" in request.form:
+            db = get_db()
+            db.execute("DELETE FROM backup WHERE id IN (SELECT b.id FROM backup b JOIN device d ON b.device_id = d.id WHERE dnac_id = ?)", (id,))
+            db.execute("DELETE FROM device WHERE dnac_id = ?", (id,))
+            db.commit()
 
     db = get_db()
     user_dnac = (
