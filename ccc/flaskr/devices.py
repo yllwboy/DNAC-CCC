@@ -83,7 +83,7 @@ def index(id):
                 .fetchone()
             )
             if backup is None:
-                abort(500, 'Invalid configuration version. Did you pick a RESTCONF version?')
+                abort(403, 'Invalid configuration version. Did you pick a RESTCONF version?')
             user_dnac = (
                 get_db()
                 .execute(
