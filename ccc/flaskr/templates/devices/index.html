@@ -3,6 +3,7 @@
 {% block header %}
   <h1>{% block title %}Devices{% endblock %}</h1>
   <a class="action" href="{{ url_for('devices.search_in_backups', id=id) }}">Search</a>
+  <a class="action" href="{{ url_for('devices.purge', id=id) }}">Purge saved data</a>
 {% endblock %}
 
 {% block content %}
@@ -10,7 +11,6 @@
     <input type="submit" id="view" name="view" value="View">
     <input type="submit" id="compare" name="compare" value="Compare">
     <input type="submit" id="restore" name="restore" value="Restore (RESTCONF only)">
-    <input type="submit" id="purge" name="purge" value="Purge all backups and saved devices" class="danger" onclick="return confirm('Are you sure?');">
   {% for device in devices %}
     <article class="post">
       <header>

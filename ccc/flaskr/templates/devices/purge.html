@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Purge saved data for "{{ dnac['addr'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <input type="checkbox" id="disconnected" name="disconnected">
+    <label for="disconnected">Purge backups and data related to disconnected devices.</label><br>
+    <input type="checkbox" id="backups" name="backups">
+    <label for="backups">Purge backups created before the following date:</label>
+    <input type="date" id="old" name="old"><br>
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}

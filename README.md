@@ -32,9 +32,11 @@ You can configure your backup jobs here.
 
 ### Device management page
 
-In the device management page, you can view and compare different configuration versions from the devices connected to the DNA Center which contain a configuration file the Cisco DNA Center can access. If you have set up RESTCONF for the selected DNA Center, you can restore a backed-up RESTCONF configuration version to the devices that support RESTCONF. Since RESTCONF is a protocol that requires connecting directly to the devices, firewalls might interfere with this functionality.
+In the device management page, you can view and compare different configuration versions from the devices connected to the DNA Center which contain a configuration file the Cisco DNA Center can access. You also have an option to purge saved data for the DNA Center currently being used.
 
 ![Device management page](screenshots/devices.png)
+
+If you have set up RESTCONF for the selected DNA Center, you can restore a backed-up RESTCONF configuration version to the devices that support RESTCONF. Since RESTCONF is a protocol that requires connecting directly to the devices, firewalls might interfere with this functionality.
 
 For unary operations such as view or restore, the left section will be the one that determines which version is selected.
 
@@ -50,3 +52,4 @@ From the device management page, you can access the search page which allows you
 
 ## To-Do
 - Multi-line search
+- Fix security issues with access to data from an account without the correct DNA Center credentials

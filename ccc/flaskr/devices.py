@@ -96,11 +96,6 @@ def index(id):
             )
             
             return "Response status code: {}".format(restconf_restore(device['addr'], backup['content'], user_dnac, None))
-        elif "purge" in request.form:
-            db = get_db()
-            db.execute("DELETE FROM backup WHERE id IN (SELECT b.id FROM backup b JOIN device d ON b.device_id = d.id WHERE dnac_id = ?)", (id,))
-            db.execute("DELETE FROM device WHERE dnac_id = ?", (id,))
-            db.commit()
 
     db = get_db()
     user_dnac = (
@@ -246,3 +241,33 @@ def view_backup(id):
     response = make_response(backup['content'], 200)
     response.mimetype = "text/plain"
     return response
+
+@bp.route("/dnacs/<int:id>/devices/purge", methods=("GET", "POST"))
+@login_required
+def purge(id):
+    db = get_db()
+    if request.method == "POST":
+        old = request.form["old"]
+
+        if "disconnected" in request.form:
+            db.execute("DELETE FROM backup WHERE id IN (SELECT b.id FROM backup b JOIN device d ON b.device_id = d.id WHERE dnac_id = ? AND connected = 0)", (id,))
+            db.execute("DELETE FROM device WHERE dnac_id = ? AND connected = 0", (id,))
+        
+        if "backups" in request.form and old is not None:
+            db.execute("DELETE FROM backup WHERE id IN (SELECT b.id FROM backup b JOIN device d ON b.device_id = d.id WHERE dnac_id = ? AND created < ?)", (id,old))
+        
+        db.commit()
+        return redirect(url_for("devices.index", id=id))
+
+    dnac = (
+        db
+        .execute(
+            "SELECT *"
+            " FROM dnac"
+            " WHERE id = ?",
+            (id,),
+        )
+        .fetchone()
+    )
+
+    return render_template("devices/purge.html", dnac=dnac)
