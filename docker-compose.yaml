@@ -1,3 +1,8 @@
+# Configuration Compliance Check
+#
+# AUTHOR(s): Héctor Cavalcanti Saavedra <hcavalca@cisco.com>
+# CONTRIBUTOR(s): Sarah Louise Justin <sajustin@cisco.com>
+
 version: '3'
 services: 
     web:
@@ -6,3 +11,5 @@ services:
             - '5000:5000'
         env_file: 
             - .dev.env
+        labels:
+            com.cisco.author: "Héctor Cavalcanti Saavedra <hcavalca@cisco.com>"

@@ -1,3 +1,35 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Configuration Compliance Check
+
+Copyright (c) 2021 Cisco and/or its affiliates.
+
+This software is licensed to you under the terms of the Cisco Sample
+Code License, Version 1.1 (the "License"). You may obtain a copy of the
+License at
+
+               https://developer.cisco.com/docs/licenses
+
+All use of the material herein must be in accordance with the terms of
+the License. All rights not expressly granted by the License are
+reserved. Unless required by applicable law or agreed to separately in
+writing, software distributed under the License is distributed on an "AS
+IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied.
+
+"""
+
+
+from __future__ import absolute_import, division, print_function
+
+__author__ = "Héctor Cavalcanti Saavedra <hcavalca@cisco.com>"
+__contributors__ = [
+    "Sarah Louise Justin <sajustin@cisco.com>"
+]
+__copyright__ = "Copyright (c) 2021 Cisco and/or its affiliates."
+__license__ = "Cisco Sample Code License, Version 1.1"
+
+
 import queue
 
 from flask import (Blueprint, flash, g, redirect, render_template, request,
@@ -41,17 +73,6 @@ def index(id):
 
 
 def get_job(id, check_author=True):
-    """Get a post and its author by id.
-
-    Checks that the id exists and optionally that the current user is
-    the author.
-
-    :param id: id of post to get
-    :param check_author: require the current user to be the author
-    :return: the post with author information
-    :raise 404: if a post with the given id doesn't exist
-    :raise 403: if the current user isn't the author
-    """
     job = (
         get_db()
         .execute(
@@ -85,7 +106,6 @@ def get_job(id, check_author=True):
 @bp.route("/dnacs/<int:id>/jobs/create", methods=("GET", "POST"))
 @login_required
 def create(id):
-    """Create a new post for the current user."""
     if request.method == "POST":
         title = request.form["title"]
         frequency = int(request.form["weeks"]) * 10080 + int(request.form["days"]) * 1440 + int(request.form["hours"]) * 60 + int(request.form["minutes"])

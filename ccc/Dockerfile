@@ -1,4 +1,12 @@
+# Configuration Compliance Check
+#
+# AUTHOR(s): Héctor Cavalcanti Saavedra <hcavalca@cisco.com>
+# CONTRIBUTOR(s): Sarah Louise Justin <sajustin@cisco.com>
+
 FROM python:3.9-alpine
+
+# Image Metadata
+LABEL com.cisco.author="Héctor Cavalcanti Saavedra <hcavalca@cisco.com>"
 
 WORKDIR /ccc
 
