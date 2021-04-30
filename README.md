@@ -10,6 +10,10 @@ Install Docker in order to build and run the image with the web application in a
 4. `docker-compose up -d`
 5. Access the web interface by opening <http://0.0.0.0:5000/> on a web browser.
 
+If you wish to stop the tool, you can execute the following: `docker-compose down`
+
+Careful, this command will stop any backup jobs from running as well.
+
 ## Getting started
 
 ### Log in page
@@ -53,3 +57,7 @@ From the device management page, you can access the search page which allows you
 ## To-Do
 - Multi-line search
 - Fix security issues with access to data from an account without the correct DNA Center credentials
+
+## See also
+
+[cisco-dnac-network-devices-cfg-backup-s3](https://developer.cisco.com/codeexchange/github/repo/robertcsapo/cisco-dnac-network-devices-cfg-backup-s3): Backup your Cisco Network Devices Configuration on S3 Storage
