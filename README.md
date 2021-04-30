@@ -60,4 +60,4 @@ From the device management page, you can access the search page which allows you
 
 ## See also
 
-[cisco-dnac-network-devices-cfg-backup-s3](https://developer.cisco.com/codeexchange/github/repo/robertcsapo/cisco-dnac-network-devices-cfg-backup-s3): Backup your Cisco Network Devices Configuration on S3 Storage
+[cisco-dnac-network-devices-cfg-backup-s3](https://developer.cisco.com/codeexchange/github/repo/robertcsapo/cisco-dnac-network-devices-cfg-backup-s3)
