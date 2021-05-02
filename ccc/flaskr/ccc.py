@@ -223,6 +223,9 @@ def backup(dnac, target, pubkey):
 def findall(p, s):
     '''Yields all the positions of
     the pattern p in the string s.'''
+    p = p.upper()
+    s = s.upper()
+    
     i = s.find(p)
     while i != -1:
         yield i
