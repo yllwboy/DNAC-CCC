@@ -129,6 +129,9 @@ def backup_cons(queue, dnac, dnac_sess, restconf_sess):
             db.commit()
             db.close()
 
+            if os.path.exists(os.path.join(folder, response.headers['fileName'])):
+                os.remove(os.path.join(folder, response.headers['fileName']))
+
             if restconf_sess:
                 url = "https://{}/restconf/data/Cisco-IOS-XE-native:native".format(d['managementIpAddress'])
 
