@@ -1,3 +1,5 @@
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/yllwboy/CCC)
+
 # Configuration Compliance Check
 A tool designed to manage the configuration of devices connected to Cisco DNA Center. Its purpose is to extend the current Cisco DNA Center feature set in that domain, to do that we leverage the DNA Center APIs through a containerized Python web application. You can use this tool to schedule backup jobs for the configuration files, find a snippet inside the backed-up configuration files or compare two configuration versions side-by-side.
 
