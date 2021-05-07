@@ -97,27 +97,27 @@ html {
     border: 1px solid #377ba8;
   }
   
-  .post > header {
+  .element > header {
     display: flex;
     align-items: flex-end;
     font-size: 0.85em;
   }
   
-  .post > header > div:first-of-type {
+  .element > header > div:first-of-type {
     flex: auto;
   }
   
-  .post > header h1 {
+  .element > header h1 {
     font-size: 1.5em;
     margin-bottom: 0;
   }
   
-  .post .about {
+  .element .about {
     color: slategray;
     font-style: italic;
   }
   
-  .post .body {
+  .element .body {
     white-space: pre-line;
   }
   

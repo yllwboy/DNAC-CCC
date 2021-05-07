@@ -48,7 +48,6 @@ bp = Blueprint("jobs", __name__)
 @bp.route("/dnacs/<int:id>/jobs")
 @login_required
 def index(id):
-    """Show all the posts, most recent first."""
     db = get_db()
     user_dnac = (
         db
