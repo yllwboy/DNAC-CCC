@@ -22,7 +22,6 @@
 -- Drop any existing data and create empty tables.
 
 DROP TABLE IF EXISTS user_dnac;
-DROP TABLE IF EXISTS job_device;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS job;
 DROP TABLE IF EXISTS backup;
@@ -72,14 +71,6 @@ CREATE TABLE device (
   addr TEXT NOT NULL,
   connected BIT NOT NULL DEFAULT 1,
   FOREIGN KEY (dnac_id) REFERENCES dnac (id)
-);
-
-CREATE TABLE job_device (
-  job_id INTEGER NOT NULL,
-  device_id INTEGER NOT NULL,
-  PRIMARY KEY (job_id, device_id),
-  FOREIGN KEY (job_id) REFERENCES job (id),
-  FOREIGN KEY (device_id) REFERENCES device (id)
 );
 
 CREATE TABLE backup (
